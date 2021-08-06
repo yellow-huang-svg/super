@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<!--1.app.message修改数据，Vue内容是如何监听message数据的改变-->
+<!--Object.deineProperty->监听对象属性的改变-->
+<!--2.当数据发生改变，Vue是如何知道哪些数据，界面发生改变-->
+<!--发布订阅者模式-->
+<div id="app">
+  {{message}}
+  {{message}}
+  {{message}}
+
+  {{name}}
+</div>
+<script>
+  const obj = {
+    message: 'hello',
+    name:'yellow'
+  }
+  Object.key(obj).forEach(key=>{
+    let value = obj[key]
+
+    Object.defineProperty(obj,key,{
+      set(newValue){
+        console.log('监听' + key + '改变');
+        //告诉谁了，谁在用，谁用告诉谁
+        //根据html代码，获取到哪些人在用属性
+        value= newValue
+        // dep.notify()
+      },
+      get(){
+        console.log('获取' + key + '对应的值');
+        //张三：get->update
+        const w1 = new Watcher('张三');
+        return value
+      }
+    })
+  })
+
+  //发布者订阅者
+  //发布者
+  class Dep{
+    constructor() {
+      this.subs=[]
+    }
+    addSub(watcher){
+      this.subs.push(watcher)
+    }
+
+    notify(){
+      this.subs.forEach(item=>{
+        item.update()
+      })
+    }
+  }
+
+  //订阅者
+  class Watcher{
+    constructor() {
+      this.name=name;
+    }
+    update(){
+      console.log(this.name + '发生update');
+    }
+  }
+
+  const dep = new Dep()
+
+  const w1 = new Watcher('张三');
+  dep.addSub(w1)
+  dep.notify()
+</script>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script>
+  const app = new Vue({
+    el:'#app',
+    data:{
+      message:'hello',
+      name:'kobe'
+    }
+  })
+</script>
+</body>
+</html>
