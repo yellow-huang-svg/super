@@ -15,7 +15,7 @@
       <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad"></home-swiper>
       <recommend-view :recommend="recommends"></recommend-view>
       <feature-view></feature-view>
-      <tap-control :titles="['新款','流行','精选']"
+      <tap-control :titles="['新款','流行','优品']"
                    @tabClick="tabClick"
                    ref="tabControl2">
       </tap-control>
